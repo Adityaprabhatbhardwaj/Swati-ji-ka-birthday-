@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Swati Bhardwaj – Birthday Countdown</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #ffdde1, #ee9ca7);
+      color: #1b1b1b;
+    }
+
+    .wrapper {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 24px 20px 28px;
+      border-radius: 18px;
+      max-width: 480px;
+      width: 92%;
+      text-align: center;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+      backdrop-filter: blur(12px);
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 6px;
+      letter-spacing: 0.04em;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 18px;
+    }
+
+    .date-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: #ff4b6e;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .countdown {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin: 14px 0 4px;
+    }
+
+    .time-box {
+      flex: 1;
+      background: #fff;
+      border-radius: 14px;
+      padding: 10px 6px 8px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+    }
+
+    .time-value {
+      display: block;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ff4b6e;
+    }
+
+    .time-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: #777;
+    }
+
+    #message {
+      margin-top: 12px;
+      font-size: 0.98rem;
+      color: #444;
+    }
+
+    /* Quote section */
+    .quote-card {
+      margin-top: 18px;
+      padding: 14px 12px 12px;
+      background: linear-gradient(135deg, #ffe3ed, #ffeef7);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 75, 110, 0.18);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quote-card::before {
+      content: "“";
+      position: absolute;
+      font-size: 4rem;
+      color: rgba(255, 75, 110, 0.16);
+      left: 10px;
+      top: -10px;
+      pointer-events: none;
+    }
+
+    #quote-text {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      padding: 0 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    #quote-meta {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #ff4b6e;
+    }
+
+    /* Small screen tweaks */
+    @media (max-width: 420px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+      .time-value {
+        font-size: 1.3rem;
+      }
+      .subtitle {
+        font-size: 0.9rem;
+      }
+      #quote-text {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="date-label">Birthday Countdown</div>
+    <h1>24 February – Swati's Day</h1>
+    <p class="subtitle">Counting every heartbeat until your special day, Swati.</p>
+
+    <div class="countdown" id="countdown">
+      <div class="time-box">
+        <span class="time-value" id="days">00</span>
+        <span class="time-label">DAYS</span>
+      </div>
+      <div class="time-box">
+        <span class="time-value" id="hours">00</span>
+        <span class="time-label">HOURS</span>
+      </div>
+      <div class="time-box">
+        <span class="time-value" id="minutes">00</span>
+        <span class="time-label">MINUTES</span>
+      </div>
+      <div class="time-box">
+        <span class="time-value" id="seconds">00</span>
+        <span class="time-label">SECONDS</span>
+      </div>
+    </div>
+
+    <p id="message"></p>
+
+    <div class="quote-card">
+      <div id="quote-text"></div>
+      <div id="quote-meta">TODAY'S LOVE NOTE FOR SWATI</div>
+    </div>
+  </div>
+
+  <script>
+    // ====== CONFIG ======
+    const nameFull = "Swati Bhardwaj";
+    const nameShort = "Swati";
+
+    function getNextBirthday() {
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      let target = new Date(currentYear, 1, 24, 0, 0, 0); // February = 1
+
+      if (target < now) {
+        target = new Date(currentYear + 1, 1, 24, 0, 0, 0);
+      }
+      return target;
+    }
+
+    const birthdayDate = getNextBirthday();
+
+    // ====== COUNTDOWN ======
+    const daysEl = document.getElementById("days");
+    const hoursEl = document.getElementById("hours");
+    const minutesEl = document.getElementById("minutes");
+    const secondsEl = document.getElementById("seconds");
+    const messageEl = document.getElementById("message");
+
+    function updateCountdown() {
+      const now = new Date();
+      const distance = birthdayDate - now;
+
+      if (distance <= 0) {
+        daysEl.textContent = "00";
+        hoursEl.textContent = "00";
+        minutesEl.textContent = "00";
+        secondsEl.textContent = "00";
+        messageEl.textContent = `Happy Birthday, ${nameShort}! Today the countdown ends and the celebration of you begins.`;
+        return;
+      }
+
+      const totalSeconds = Math.floor(distance / 1000);
+      const days = Math.floor(totalSeconds / (60 * 60 * 24));
+      const hours = Math.floor((totalSeconds % (60 * 60 * 24)) / (60 * 60));
+      const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+      const seconds = totalSeconds % 60;
+
+      daysEl.textContent = String(days).padStart(2, "0");
+      hoursEl.textContent = String(hours).padStart(2, "0");
+      minutesEl.textContent = String(minutes).padStart(2, "0");
+      secondsEl.textContent = String(seconds).padStart(2, "0");
+
+      messageEl.textContent = `Only ${days} days left until your birthday, ${nameShort}. Every second is another reason to love you more.`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // ====== DAILY LOVE QUOTE ======
+    const loveQuotes = [
+      `Every day with you, ${nameShort}, turns ordinary moments into little pieces of magic.`,
+      `${nameShort}, your smile is the sunrise my heart waits for, even on the cloudiest days.`,
+      `Loving you, ${nameShort}, feels like finally hearing my favorite song in perfect harmony.`,
+      `If I could choose all over again, it would still be you, ${nameFull}, in every universe.`,
+      `${nameShort}, your laughter is the place where my worries forget how to exist.`,
+      `I didn’t know home was a person until your heart opened its doors to mine, ${nameShort}.`,
+      `${nameShort}, you are the softest answer to all the hardest questions in my life.`,
+      `I fall for you in new ways every day, ${nameShort}, as if my heart keeps learning your language.`,
+      `Your love, ${nameShort}, turns simple moments into memories my heart never wants to forget.`,
+      `With you, ${nameShort}, the future feels less like a mystery and more like a promise.`,
+      `${nameShort}, you’re the quiet in my chaos and the warmth in all my winters.`,
+      `Every ‘goodnight’ with you, ${nameShort}, makes every ‘good morning’ worth waiting for.`,
+      `Your hand in mine, ${nameShort}, is the only map I need to feel safe in this world.`,
+      `Loving you, ${nameShort}, is the closest thing to wishing on a star and watching it come true.`,
+      `${nameShort}, your presence turns my fears into stories where love always wins in the end.`,
+      `In a world of temporary things, your love, ${nameShort}, feels beautifully infinite.`,
+      `Your voice, ${nameShort}, is the one soft place my thoughts always want to rest in.`,
+      `I never believed in perfect timing until you arrived, ${nameShort}, exactly when my heart needed you.`,
+      `You are my favorite reason, ${nameShort}, to want more tomorrows than yesterdays.`,
+      `Even on my hardest days, loving you, ${nameShort}, is the easiest thing I’ve ever done.`,
+      `If my heart wrote a diary, ${nameShort}, every page would somehow still be about you.`,
+      `You don’t complete me, ${nameShort}; you just make my world feel wonderfully full.`,
+      `You are the gentle reminder, ${nameShort}, that love doesn’t have to be loud to be strong.`,
+      `Every glance from you, ${nameShort}, feels like a quiet promise that I’m not alone.`,
+      `Your love, ${nameShort}, teaches my heart to choose softness, even when life feels rough.`,
+      `You turned my ‘someday’ into ‘right now’, ${nameShort}, just by being here.`,
+      `Loving you is like breathing, ${nameShort}; effortless, constant, and impossible to stop.`,
+      `The closer your heart is to mine, ${nameShort}, the further away my doubts feel.`,
+      `${nameShort}, you’re not just part of my story; you’re my favorite chapter.`,
+      `One lifetime with you, ${nameShort}, would still feel too short for all the love in my heart.`
+    ];
+
+    function getDailyQuote() {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = today.getMonth() + 1;
+      const day = today.getDate();
+
+      const seed = year * 10000 + month * 100 + day;
+      const index = seed % loveQuotes.length;
+      return loveQuotes[index];
+    }
+
+    const quoteTextEl = document.getElementById("quote-text");
+    quoteTextEl.textContent = getDailyQuote();
+  </script>
+</body>
+</html>
